@@ -12,8 +12,8 @@ type PortfolioItem = {
 };
 
 const BRAND_NAME = 'MotionMintStudio';
-const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudios?igsh=bXp1cmlzdGk2djB0';
-const LINKEDIN_URL = 'https://www.linkedin.com/company/motionmintstudio/';
+const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/motionmintstudio/';
 const WHATSAPP_NUMBER = '918097620107';
 
 const navLinks = [
@@ -30,6 +30,7 @@ const services = [
   ['▶', 'YouTube & Long-Form', 'Professional editing for YouTube channels — colour grading, pacing, sound design, and engaging storytelling.'],
   ['⚡', 'Reels, Shorts & Short Films', 'Hook-driven short-form content optimised for Instagram, YouTube Shorts, and every major platform algorithm.'],
   ['🎯', 'UGC & Brand Content', 'Authentic user-generated content edits, brand films, and product showcases that convert viewers into customers.'],
+  ['🎬', 'Commercial Shoots', 'Polished commercial shoot production and edits designed to showcase brands, products, and campaigns with premium visual impact.'],
   ['🤖', 'AI Video & Automation', 'Cutting-edge AI-powered video generation, editing automation, and next-generation content production.'],
   ['◈', '3D CAD & Visualisation', 'High-fidelity 3D modelling, product renders, and architectural visualisations crafted for maximum impact.'],
   ['🎉', 'Events & Parties', 'Dynamic event highlight reels and party coverage edits that capture every moment of the celebration.'],
@@ -85,9 +86,9 @@ const portfolioItems: PortfolioItem[] = [
 ];
 
 const team = [
-  ['👤', 'Anshuman Rawal', 'Founder & Creative Director', 'The visionary behind MotionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
-  ['👤', 'Harsh Rawal', 'Founder & Creative Director', 'The visionary behind MotionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
-  ['👤', 'Manan Bapna', 'Operations & Technical Director', 'Leads operations, client delivery, and strategic growth at MotionMintStudio, ensuring every project runs smoothly from first conversation to final frame.'],
+  ['👤', 'Harsh Rawal', 'Founder & CEO', 'Shapes the creative vision and business direction of MotionMintStudio, leading the brand with a focus on storytelling, growth, and high-impact client work.'],
+  ['👤', 'Anshuman Rawal', 'Co-Founder & CTO', 'Drives the technical backbone of MotionMintStudio, overseeing systems, innovation, and workflows that keep production efficient, scalable, and future-ready.'],
+  ['👤', 'Manan Bapna', 'Technical Head & COO', 'Oversees operations and delivery across MotionMintStudio, aligning execution, client communication, and internal coordination to keep every project running smoothly end to end.'],
 ] as const;
 
 const testimonials = [
@@ -406,7 +407,14 @@ function App() {
                 >
                   <InstagramIcon />
                 </a>
-                <a href={LINKEDIN_URL} className="social-btn" title="LinkedIn" aria-label="LinkedIn">
+                <a
+                  href={LINKEDIN_URL}
+                  className="social-btn"
+                  title="LinkedIn"
+                  aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <LinkedInIcon />
                 </a>
                 <a href="#" className="social-btn" title="Twitter / X" aria-label="Twitter / X">
@@ -414,7 +422,7 @@ function App() {
                 </a>
                 <a
                   href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                  className="social-btn"
+                  className="social-btn whatsapp-social"
                   title="WhatsApp"
                   aria-label="WhatsApp"
                   target="_blank"
@@ -531,16 +539,6 @@ function App() {
         <p className="footer-copy">© {new Date().getFullYear()} MotionMintStudio. All rights reserved.</p>
       </footer>
 
-      <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}`}
-        className="whatsapp-float"
-        target="_blank"
-        rel="noreferrer"
-        title="Chat on WhatsApp"
-        aria-label="Chat on WhatsApp"
-      >
-        <WhatsAppIcon />
-      </a>
     </>
   );
 }
@@ -575,7 +573,7 @@ function XIcon() {
 
 function WhatsAppIcon() {
   return (
-    <svg viewBox="0 0 24 24">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
       <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.553 4.103 1.519 5.833L.057 23.25l5.562-1.461A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.659-.523-5.168-1.432l-.371-.22-3.302.867.882-3.218-.24-.384A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
     </svg>
