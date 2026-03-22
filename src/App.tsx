@@ -11,6 +11,8 @@ type PortfolioItem = {
   featured?: boolean;
 };
 
+const BRAND_NAME = 'MotionMintStudio';
+const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudios?igsh=bXp1cmlzdGk2djB0';
 const WHATSAPP_NUMBER = '91XXXXXXXXXX';
 
 const navLinks = [
@@ -82,15 +84,15 @@ const portfolioItems: PortfolioItem[] = [
 ];
 
 const team = [
-  ['👤', 'Anshuman Rawal', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
-  ['👤', 'Harsh Rawal', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
-  ['👤', 'Manan Bapna', 'Operations & Technical Director', 'Leads operations, client delivery, and strategic growth at MontionMintStudio, ensuring every project runs smoothly from first conversation to final frame.'],
+  ['👤', 'Anshuman Rawal', 'Founder & Creative Director', 'The visionary behind MotionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
+  ['👤', 'Harsh Rawal', 'Founder & Creative Director', 'The visionary behind MotionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
+  ['👤', 'Manan Bapna', 'Operations & Technical Director', 'Leads operations, client delivery, and strategic growth at MotionMintStudio, ensuring every project runs smoothly from first conversation to final frame.'],
 ] as const;
 
 const testimonials = [
-  ['💍', '[Client Name]', 'Wedding Film', "MontionMintStudio transformed our wedding footage into something we'll treasure for a lifetime. The cinematic quality was beyond anything we imagined."],
-  ['▶', '[Client Name]', 'YouTube Creator', 'Our YouTube channel engagement doubled after MontionMintStudio started editing our content. The pacing, colour, and energy they bring is unmatched.'],
-  ['◈', '[Client Name]', 'Brand Campaign', 'The 3D product visualisations MontionMintStudio created for our brand were absolutely stunning. It elevated our entire marketing campaign.'],
+  ['💍', '[Client Name]', 'Wedding Film', "MotionMintStudio transformed our wedding footage into something we'll treasure for a lifetime. The cinematic quality was beyond anything we imagined."],
+  ['▶', '[Client Name]', 'YouTube Creator', 'Our YouTube channel engagement doubled after MotionMintStudio started editing our content. The pacing, colour, and energy they bring is unmatched.'],
+  ['◈', '[Client Name]', 'Brand Campaign', 'The 3D product visualisations MotionMintStudio created for our brand were absolutely stunning. It elevated our entire marketing campaign.'],
 ] as const;
 
 function App() {
@@ -142,7 +144,7 @@ function App() {
     const fullName = [firstName, lastName].filter(Boolean).join(' ');
 
     const message = [
-      'New MontionMintStudio enquiry',
+      `New ${BRAND_NAME} enquiry`,
       '',
       `Name: ${fullName || 'Not provided'}`,
       `Email: ${email || 'Not provided'}`,
@@ -166,7 +168,7 @@ function App() {
     <>
       <nav className="site-nav">
         <a href="#hero" className="nav-logo">
-          MontionMint<span>Studio</span>
+          MotionMint<span>Studio</span>
         </a>
 
         <ul className="nav-links">
@@ -215,7 +217,7 @@ function App() {
             that moves.
           </h1>
           <p className="hero-sub">
-            From cinematic VFX to viral reels — MontionMintStudio delivers world-class editing for
+            From cinematic VFX to viral reels — MotionMintStudio delivers world-class editing for
             brands, creators, and storytellers.
           </p>
           <div className="hero-btns">
@@ -234,7 +236,7 @@ function App() {
                 </svg>
               </div>
             </div>
-            <span className="reel-label">MontionMintStudio — 2024 Showreel</span>
+            <span className="reel-label">MotionMintStudio — 2024 Showreel</span>
           </div>
         </section>
 
@@ -320,7 +322,7 @@ function App() {
             </div>
 
             <div className="about-content reveal">
-              <p className="section-eyebrow">About MontionMintStudio</p>
+              <p className="section-eyebrow">About MotionMintStudio</p>
               <h2 className="section-title">
                 Crafted with
                 <br />
@@ -328,13 +330,13 @@ function App() {
               </h2>
               <div className="divider" />
               <p className="section-desc about-copy">
-                MontionMintStudio is a Mumbai-based premium creative studio built for brands and
+                MotionMintStudio is a Mumbai-based premium creative studio built for brands and
                 storytellers who refuse to be ordinary. We believe that every frame is a
                 canvas, every cut a brushstroke.
               </p>
               <p className="section-desc about-copy">
                 From our founder&apos;s obsession with cinematic language to our team&apos;s mastery
-                of cutting-edge tools, MontionMintStudio delivers content that doesn&apos;t just look
+                of cutting-edge tools, MotionMintStudio delivers content that doesn&apos;t just look
                 good — it <em className="gold-emphasis">feels</em> unforgettable.
               </p>
               <a href="#contact" className="btn-primary">
@@ -435,7 +437,14 @@ function App() {
               </div>
 
               <div className="socials">
-                <a href="#" className="social-btn" title="Instagram" aria-label="Instagram">
+                <a
+                  href={INSTAGRAM_URL}
+                  className="social-btn"
+                  title="Instagram"
+                  aria-label="Instagram"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <InstagramIcon />
                 </a>
                 <a href="#" className="social-btn" title="LinkedIn" aria-label="LinkedIn">
@@ -552,7 +561,7 @@ function App() {
 
       <footer>
         <div className="footer-logo">
-          MontionMint<span>Studio</span>
+          MotionMint<span>Studio</span>
         </div>
         <div className="footer-links">
           <a href="#services">Services</a>
@@ -560,7 +569,7 @@ function App() {
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>
-        <p className="footer-copy">© {new Date().getFullYear()} MontionMintStudio. All rights reserved.</p>
+        <p className="footer-copy">© {new Date().getFullYear()} MotionMintStudio. All rights reserved.</p>
       </footer>
 
       <a
