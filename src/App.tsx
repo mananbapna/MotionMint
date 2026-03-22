@@ -1,4 +1,8 @@
 import { FormEvent, useEffect, useState } from 'react';
+import anshumanPortrait from './assets/Anshuman_Portrait.png';
+import harshPortrait from './assets/Harsh_Portrait.png';
+import mananPortrait from './assets/Manan_Portrait.png';
+import vfxShowreel from './assets/VFX.mp4';
 
 type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | '3D';
 
@@ -9,6 +13,7 @@ type PortfolioItem = {
   category: PortfolioCategory;
   subtitle: string;
   featured?: boolean;
+  videoSrc?: string;
 };
 
 const BRAND_NAME = 'MotionMintStudio';
@@ -46,6 +51,7 @@ const portfolioItems: PortfolioItem[] = [
     category: 'VFX',
     subtitle: 'VFX · Motion Graphics',
     featured: true,
+    videoSrc: vfxShowreel,
   },
   {
     emoji: '💍',
@@ -86,9 +92,9 @@ const portfolioItems: PortfolioItem[] = [
 ];
 
 const team = [
-  ['👤', 'Harsh Rawal', 'Founder & CEO', 'Shapes the creative vision and business direction of MotionMintStudio, leading the brand with a focus on storytelling, growth, and high-impact client work.'],
-  ['👤', 'Anshuman Rawal', 'Co-Founder & CTO', 'Drives the technical backbone of MotionMintStudio, overseeing systems, innovation, and workflows that keep production efficient, scalable, and future-ready.'],
-  ['👤', 'Manan Bapna', 'Technical Head & COO', 'Oversees operations and delivery across MotionMintStudio, aligning execution, client communication, and internal coordination to keep every project running smoothly end to end.'],
+  ['👤', 'Harsh Rawal', 'Founder & CEO', 'Shapes the creative vision and business direction of MotionMintStudio, leading the brand with a focus on storytelling, growth, and high-impact client work.', harshPortrait],
+  ['👤', 'Anshuman Rawal', 'Co-Founder & CFO', 'Drives the technical backbone of MotionMintStudio, overseeing systems, innovation, and workflows that keep production efficient, scalable, and future-ready.', anshumanPortrait],
+  ['👤', 'Manan Bapna', 'CTO', 'Oversees operations and delivery across MotionMintStudio, aligning execution, client communication, and internal coordination to keep every project running smoothly end to end.', mananPortrait],
 ] as const;
 
 const testimonials = [
@@ -295,10 +301,22 @@ function App() {
                 className={`port-item ${item.featured ? 'port-item-featured' : ''}`}
               >
                 <div className="port-placeholder">
-                  <div className="port-inner">
-                    <span className="emoji">{item.emoji}</span>
-                    <span>{item.label}</span>
-                  </div>
+                  {item.videoSrc ? (
+                    <video
+                      className="port-video"
+                      src={item.videoSrc}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                    />
+                  ) : (
+                    <div className="port-inner">
+                      <span className="emoji">{item.emoji}</span>
+                      <span>{item.label}</span>
+                    </div>
+                  )}
                 </div>
                 <div className="port-overlay">
                   <div className="port-overlay-text">
@@ -353,9 +371,15 @@ function App() {
             <div className="divider" />
           </div>
           <div className="team-grid">
-            {team.map(([avatar, name, role, bio]) => (
+            {team.map(([avatar, name, role, bio, photo]) => (
               <article key={name} className="team-card reveal">
-                <div className="team-avatar">{avatar}</div>
+                <div className="team-avatar">
+                  {photo ? (
+                    <img src={photo} alt={name} className="team-avatar-image" />
+                  ) : (
+                    avatar
+                  )}
+                </div>
                 <h3>{name}</h3>
                 <p className="team-role">{role}</p>
                 <p className="team-bio">{bio}</p>
@@ -384,11 +408,11 @@ function App() {
               <div className="contact-details">
                 <div className="contact-item">
                   <div className="contact-item-icon">✉</div>
-                  <span>hello@motionmintstudio.in</span>
+                  <span>motionmintstudio24@gmail.com</span>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">📱</div>
-                  <span>+91 80976 20107 / +91 80976 20107</span>
+                  <span>+91 80976 20107 / +91 98925 07669</span>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">📍</div>
