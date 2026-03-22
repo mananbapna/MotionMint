@@ -424,7 +424,7 @@ function App() {
               <div className="contact-details">
                 <div className="contact-item">
                   <div className="contact-item-icon">✉</div>
-                  <span>hello@montionmintstudio.in</span>
+                  <span>hello@motionmintstudio.in</span>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">📱</div>
