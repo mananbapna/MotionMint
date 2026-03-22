@@ -13,7 +13,8 @@ type PortfolioItem = {
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudios?igsh=bXp1cmlzdGk2djB0';
-const WHATSAPP_NUMBER = '91XXXXXXXXXX';
+const LINKEDIN_URL = 'https://www.linkedin.com/company/motionmintstudio/';
+const WHATSAPP_NUMBER = '918097620107';
 
 const navLinks = [
   { href: '#services', label: 'Services' },
@@ -315,10 +316,6 @@ function App() {
           <div className="about-grid">
             <div className="about-visual reveal">
               <div className="about-img-placeholder">👤</div>
-              <div className="about-badge">
-                <span className="num">3+</span>
-                <span className="label">Years of Excellence</span>
-              </div>
             </div>
 
             <div className="about-content reveal">
@@ -342,21 +339,6 @@ function App() {
               <a href="#contact" className="btn-primary">
                 Work With Us
               </a>
-
-              <div className="about-stats">
-                <div className="stat-item">
-                  <span className="stat-num">50+</span>
-                  <span className="stat-label">Projects</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-num">30+</span>
-                  <span className="stat-label">Happy Clients</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-num">8</span>
-                  <span className="stat-label">Services</span>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -383,29 +365,6 @@ function App() {
 
         <div className="gold-line" />
 
-        <section id="testimonials">
-          <div className="test-header reveal">
-            <p className="section-eyebrow">Client Words</p>
-            <h2 className="section-title">What They Say</h2>
-            <div className="divider" />
-          </div>
-          <div className="test-grid">
-            {testimonials.map(([avatar, name, project, quote]) => (
-              <article key={`${name}-${project}`} className="test-card reveal">
-                <div className="test-quote">"</div>
-                <p className="test-text">{quote}</p>
-                <div className="test-author">
-                  <div className="test-av">{avatar}</div>
-                  <div>
-                    <div className="test-name">{name}</div>
-                    <div className="test-proj">{project}</div>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <div className="gold-line" />
 
         <section id="contact">
@@ -428,7 +387,7 @@ function App() {
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">📱</div>
-                  <span>+91 XXXXX XXXXX</span>
+                  <span>+91 80976 20107 / +91 80976 20107</span>
                 </div>
                 <div className="contact-item">
                   <div className="contact-item-icon">📍</div>
@@ -447,7 +406,7 @@ function App() {
                 >
                   <InstagramIcon />
                 </a>
-                <a href="#" className="social-btn" title="LinkedIn" aria-label="LinkedIn">
+                <a href={LINKEDIN_URL} className="social-btn" title="LinkedIn" aria-label="LinkedIn">
                   <LinkedInIcon />
                 </a>
                 <a href="#" className="social-btn" title="Twitter / X" aria-label="Twitter / X">
@@ -455,7 +414,7 @@ function App() {
                 </a>
                 <a
                   href={`https://wa.me/${WHATSAPP_NUMBER}`}
-                  className="social-btn whatsapp-social"
+                  className="social-btn"
                   title="WhatsApp"
                   aria-label="WhatsApp"
                   target="_blank"
