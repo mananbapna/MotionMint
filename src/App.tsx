@@ -82,9 +82,9 @@ const portfolioItems: PortfolioItem[] = [
 ];
 
 const team = [
-  ['👤', '[Founder Name]', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
-  ['👤', '[Team Member 2]', 'VFX & Motion Artist', 'Specialises in high-end VFX, compositing, and motion graphics that make every frame breathtaking.'],
-  ['👤', '[Team Member 3]', 'Editor & Colourist', 'Master of pacing, colour science, and narrative flow. Turns raw footage into compelling visual stories.'],
+  ['👤', 'Anshuman Rawal', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
+  ['👤', 'Harsh Rawal', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
+  ['👤', 'Manan Bapna', 'COO', 'Leads operations, client delivery, and strategic growth at MontionMintStudio, ensuring every project runs smoothly from first conversation to final frame.'],
 ] as const;
 
 const testimonials = [
