@@ -1,6 +1,6 @@
-# MotionMint
+# MontionMintStudio
 
-React + TypeScript version of the MotionMint landing page.
+React + TypeScript version of the MontionMintStudio landing page.
 
 ## Run locally
 
