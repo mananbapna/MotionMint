@@ -84,7 +84,7 @@ const portfolioItems: PortfolioItem[] = [
 const team = [
   ['👤', 'Anshuman Rawal', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
   ['👤', 'Harsh Rawal', 'Founder & Creative Director', 'The visionary behind MontionMintStudio. Passionate about cinematic storytelling and pushing the boundaries of visual media.'],
-  ['👤', 'Manan Bapna', 'COO', 'Leads operations, client delivery, and strategic growth at MontionMintStudio, ensuring every project runs smoothly from first conversation to final frame.'],
+  ['👤', 'Manan Bapna', 'Operations & Technical Director', 'Leads operations, client delivery, and strategic growth at MontionMintStudio, ensuring every project runs smoothly from first conversation to final frame.'],
 ] as const;
 
 const testimonials = [
