@@ -697,18 +697,21 @@ footer {
 }
 
 .port-video-embed {
+  position: absolute;
+  top: 0;
+  left: 50%;
   width: 178%;
   height: 100%;
-  margin-left: -39%;
+  transform: translateX(-50%);
   border: 0;
   pointer-events: none;
 }
 
 .port-video-embed-portrait {
+  top: 50%;
   width: 100%;
   height: 240%;
-  margin-top: -70%;
-  margin-left: 0;
+  transform: translate(-50%, -50%);
 }
 
 .port-video-hint {
