@@ -2,9 +2,6 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import anshumanPortrait from './assets/Anshuman_Portrait.png';
 import harshPortrait from './assets/Harsh_Portrait.png';
 import mananPortrait from './assets/Manan_Portrait.png';
-import reelShowcase from './assets/Reel.optimized.mp4';
-import vfxShowreel from './assets/VFX.mp4';
-import weddingShowcase from './assets/Wedding.mp4';
 
 type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | '3D';
 
@@ -16,8 +13,17 @@ type PortfolioItem = {
   subtitle: string;
   featured?: boolean;
   videoSrc?: string;
+  embedSrc?: string;
+  previewEmbedSrc?: string;
+  thumbnailSrc?: string;
   showInAll?: boolean;
 };
+
+const VFX_YOUTUBE_ID = 'Wmam-VvjcfE';
+const WEDDING_YOUTUBE_ID = 'PxFDrJvHbVo';
+const SECOND_WEDDING_YOUTUBE_ID = 'SEF0Bfo0S4A';
+const MAIN_YOUTUBE_ID = 'OUKn4v5a4xM';
+const REEL_YOUTUBE_ID = '9LvdTwylZoI';
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
@@ -53,7 +59,9 @@ const portfolioItems: PortfolioItem[] = [
     title: 'Cinematic VFX Reel',
     category: 'VFX',
     subtitle: 'VFX · Motion Graphics',
-    videoSrc: vfxShowreel,
+    embedSrc: `https://www.youtube-nocookie.com/embed/${VFX_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${VFX_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${VFX_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${VFX_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${VFX_YOUTUBE_ID}/hqdefault.jpg`,
   },
   {
     emoji: '💍',
@@ -61,7 +69,20 @@ const portfolioItems: PortfolioItem[] = [
     title: 'Priya & Aryan',
     category: 'Wedding',
     subtitle: 'Wedding · Cinematic',
-    videoSrc: weddingShowcase,
+    embedSrc: `https://www.youtube-nocookie.com/embed/${WEDDING_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${WEDDING_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${WEDDING_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${WEDDING_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${WEDDING_YOUTUBE_ID}/hqdefault.jpg`,
+  },
+  {
+    emoji: '💍',
+    label: 'Wedding Story',
+    title: 'Riya & Kunal',
+    category: 'Wedding',
+    subtitle: 'Wedding · Celebration',
+    embedSrc: `https://www.youtube-nocookie.com/embed/${SECOND_WEDDING_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${SECOND_WEDDING_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${SECOND_WEDDING_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SECOND_WEDDING_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${SECOND_WEDDING_YOUTUBE_ID}/hqdefault.jpg`,
+    showInAll: false,
   },
   {
     emoji: '▶',
@@ -69,7 +90,9 @@ const portfolioItems: PortfolioItem[] = [
     title: 'YouTube Spotlight',
     category: 'YouTube',
     subtitle: 'YouTube · Long-Form',
-    videoSrc: '/videos/youtube-main.optimized.mp4',
+    embedSrc: `https://www.youtube-nocookie.com/embed/${MAIN_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${MAIN_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${MAIN_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${MAIN_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${MAIN_YOUTUBE_ID}/hqdefault.jpg`,
   },
   {
     emoji: '▶',
@@ -86,7 +109,9 @@ const portfolioItems: PortfolioItem[] = [
     title: 'Cinematic Reel',
     category: 'Reels',
     subtitle: 'Reels · Social',
-    videoSrc: reelShowcase,
+    embedSrc: `https://www.youtube-nocookie.com/embed/${REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${REEL_YOUTUBE_ID}/hqdefault.jpg`,
   },
   {
     emoji: '◈',
@@ -158,12 +183,52 @@ function App() {
     document.body.classList.toggle('video-open', Boolean(activeVideo));
 
     const handleEscape = (event: KeyboardEvent) => {
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON'].includes(target.tagName)
+      ) {
+        return;
+      }
+
       if (event.key === 'Escape') {
         const video = modalVideoRef.current;
         if (video) {
           video.pause();
         }
         setActiveVideo(null);
+        return;
+      }
+
+      if (!activeVideo) {
+        return;
+      }
+
+      if (!activeVideo.videoSrc) {
+        return;
+      }
+
+      if (event.key === ' ' || event.code === 'Space') {
+        event.preventDefault();
+        toggleModalPlayback();
+        return;
+      }
+
+      if (event.key.toLowerCase() === 'm') {
+        event.preventDefault();
+        toggleModalMute();
+        return;
+      }
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        skipModalTime(-5);
+        return;
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        skipModalTime(5);
       }
     };
 
@@ -178,7 +243,7 @@ function App() {
   useEffect(() => {
     const video = modalVideoRef.current;
 
-    if (!video || !activeVideo) {
+    if (!video || !activeVideo || !activeVideo.videoSrc) {
       return;
     }
 
@@ -254,6 +319,17 @@ function App() {
     const nextMuted = !modalMuted;
     video.muted = nextMuted;
     setModalMuted(nextMuted);
+  };
+
+  const skipModalTime = (delta: number) => {
+    const video = modalVideoRef.current;
+    if (!video) {
+      return;
+    }
+
+    const nextTime = Math.min(Math.max(video.currentTime + delta, 0), video.duration || 0);
+    video.currentTime = nextTime;
+    setModalProgress(nextTime);
   };
 
   const handleModalSeek = (value: number) => {
@@ -437,15 +513,15 @@ function App() {
             {visiblePortfolio.map((item, index) => (
               <article
                 key={`${item.title}-${index}`}
-                className={`port-item ${item.featured ? 'port-item-featured' : ''} ${item.videoSrc ? 'port-item-video' : ''}`}
+                className={`port-item ${item.featured ? 'port-item-featured' : ''} ${item.videoSrc || item.embedSrc ? 'port-item-video' : ''}`}
               >
                 <div
                   className="port-placeholder"
-                  onClick={item.videoSrc ? () => openVideoModal(item) : undefined}
-                  role={item.videoSrc ? 'button' : undefined}
-                  tabIndex={item.videoSrc ? 0 : undefined}
+                  onClick={item.videoSrc || item.embedSrc ? () => openVideoModal(item) : undefined}
+                  role={item.videoSrc || item.embedSrc ? 'button' : undefined}
+                  tabIndex={item.videoSrc || item.embedSrc ? 0 : undefined}
                   onKeyDown={
-                    item.videoSrc
+                    item.videoSrc || item.embedSrc
                       ? (event) => {
                           if (event.key === 'Enter' || event.key === ' ') {
                             event.preventDefault();
@@ -454,7 +530,7 @@ function App() {
                         }
                       : undefined
                   }
-                  aria-label={item.videoSrc ? `Open ${item.title} video` : undefined}
+                  aria-label={item.videoSrc || item.embedSrc ? `Open ${item.title} video` : undefined}
                 >
                   {item.videoSrc ? (
                     <>
@@ -467,6 +543,26 @@ function App() {
                         playsInline
                         preload="metadata"
                       />
+                      <div className="port-video-hint">
+                        <span className="port-video-hint-icon" aria-hidden="true">
+                          <PlayIcon />
+                        </span>
+                        <span>Open</span>
+                      </div>
+                    </>
+                  ) : item.embedSrc && item.thumbnailSrc ? (
+                    <>
+                      {item.previewEmbedSrc ? (
+                        <iframe
+                          className={`port-video port-video-embed ${item.category === 'Reels' ? 'port-video-embed-portrait' : ''}`}
+                          src={item.previewEmbedSrc}
+                          title={`${item.title} preview`}
+                          allow="autoplay; encrypted-media; picture-in-picture"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                        />
+                      ) : (
+                        <img src={item.thumbnailSrc} alt={item.title} className="port-video port-video-thumb" />
+                      )}
                       <div className="port-video-hint">
                         <span className="port-video-hint-icon" aria-hidden="true">
                           <PlayIcon />
@@ -744,22 +840,42 @@ function App() {
               Close
             </button>
             <div className="video-modal-stage">
-              <video
-                ref={modalVideoRef}
-                className="video-modal-player"
-                src={activeVideo.videoSrc}
-                autoPlay
-                playsInline
-                preload="auto"
-                onClick={toggleModalPlayback}
-              />
+              {activeVideo.videoSrc ? (
+                <video
+                  ref={modalVideoRef}
+                  className="video-modal-player"
+                  src={activeVideo.videoSrc}
+                  autoPlay
+                  playsInline
+                  preload="auto"
+                  onClick={toggleModalPlayback}
+                />
+              ) : activeVideo.embedSrc ? (
+                <iframe
+                  className="video-modal-embed"
+                  src={activeVideo.embedSrc}
+                  title={activeVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+              ) : null}
               <div className="video-modal-topbar">
                 <div className="video-modal-meta">
                   <h4>{activeVideo.title}</h4>
                   <span>{activeVideo.subtitle}</span>
                 </div>
               </div>
+              {activeVideo.videoSrc ? (
               <div className="video-modal-controls">
+                <button
+                  type="button"
+                  className="video-control"
+                  aria-label="Skip back 5 seconds"
+                  onClick={() => skipModalTime(-5)}
+                >
+                  <SkipBackIcon />
+                </button>
                 <button
                   type="button"
                   className="video-control"
@@ -767,6 +883,14 @@ function App() {
                   onClick={toggleModalPlayback}
                 >
                   {modalPlaying ? <PauseIcon /> : <PlayIcon />}
+                </button>
+                <button
+                  type="button"
+                  className="video-control"
+                  aria-label="Skip forward 5 seconds"
+                  onClick={() => skipModalTime(5)}
+                >
+                  <SkipForwardIcon />
                 </button>
                 <button
                   type="button"
@@ -798,6 +922,7 @@ function App() {
                   </div>
                 </div>
               </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -897,6 +1022,44 @@ function MuteIcon() {
       <path d="M5 9v6h4l5 4V5l-5 4z" />
       <path d="m17 9 4 6" />
       <path d="m21 9-4 6" />
+    </svg>
+  );
+}
+
+function SkipBackIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M11 19 2 12l9-7v14z" />
+      <path d="M22 19 13 12l9-7v14z" />
+    </svg>
+  );
+}
+
+function SkipForwardIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m13 19 9-7-9-7v14z" />
+      <path d="M2 19 11 12 2 5v14z" />
     </svg>
   );
 }
