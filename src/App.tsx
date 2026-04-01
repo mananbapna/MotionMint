@@ -2,7 +2,6 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import anshumanPortrait from './assets/Anshuman_Portrait.png';
 import harshPortrait from './assets/Harsh_Portrait.png';
 import mananPortrait from './assets/Manan_Portrait.png';
-import lalitChandigarhReelVideo from './RollingLoudIndia.mp4';
 
 type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | 'Fest';
 
@@ -52,9 +51,10 @@ const WEDDING_YOUTUBE_ID = 'PxFDrJvHbVo';
 const SECOND_WEDDING_YOUTUBE_ID = 'SEF0Bfo0S4A';
 const MAIN_YOUTUBE_ID = 'Es9MvcHDybI';
 const REEL_YOUTUBE_ID = '9LvdTwylZoI';
-const LALIT_REEL_YOUTUBE_ID = 'f1Au0kefri4';
+const ROLLINGOUTINDIA_REEL_YOUTUBE_ID = 'f1Au0kefri4';
 const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
 const FEST_YOUTUBE_ID = 'qJRmN1ZQ-BE';
+const ROLLINGOUTINDIA_REEL = '/src/assets/RollingOutIndia.mp4';
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
@@ -147,13 +147,13 @@ const portfolioItems: PortfolioItem[] = [
   {
     emoji: '⚡',
     label: 'Brand Reel',
-    title: 'LaLiT Chandigarh Reel',
+    title: 'RollingOutIndia Reel',
     category: 'Reels',
-    subtitle: 'Reels · Hospitality',
-    embedSrc: `https://www.youtube-nocookie.com/embed/${LALIT_REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${LALIT_REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
-    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${LALIT_REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${LALIT_REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
-    thumbnailSrc: `https://i.ytimg.com/vi/${LALIT_REEL_YOUTUBE_ID}/hqdefault.jpg`,
-    videoSrc: lalitChandigarhReelVideo,
+    subtitle: 'Reels · Event',
+    embedSrc: `https://www.youtube-nocookie.com/embed/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}/hqdefault.jpg`,
+    videoSrc: ROLLINGOUTINDIA_REEL,
     showInAll: false,
   },
   {
