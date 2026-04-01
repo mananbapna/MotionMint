@@ -52,7 +52,6 @@ const WEDDING_YOUTUBE_ID = 'PxFDrJvHbVo';
 const SECOND_WEDDING_YOUTUBE_ID = 'SEF0Bfo0S4A';
 const MAIN_YOUTUBE_ID = 'Es9MvcHDybI';
 const REEL_YOUTUBE_ID = '9LvdTwylZoI';
-const ROLLINGOUTINDIA_REEL_YOUTUBE_ID = 'f1Au0kefri4';
 const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
 const FEST_YOUTUBE_ID = 'qJRmN1ZQ-BE';
 
@@ -150,9 +149,6 @@ const portfolioItems: PortfolioItem[] = [
     title: 'RollingOutIndia Reel',
     category: 'Reels',
     subtitle: 'Reels · Event',
-    embedSrc: `https://www.youtube-nocookie.com/embed/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
-    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
-    thumbnailSrc: `https://i.ytimg.com/vi/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}/hqdefault.jpg`,
     videoSrc: rollingOutIndiaReelVideo,
     showInAll: false,
   },
@@ -256,18 +252,35 @@ function App() {
   const [activeFilter, setActiveFilter] = useState<PortfolioCategory>('All');
   const [submitted, setSubmitted] = useState(false);
   const [activeVideo, setActiveVideo] = useState<PortfolioItem | null>(null);
+  const [unavailablePortfolioTitles, setUnavailablePortfolioTitles] = useState<string[]>([]);
   const [modalPlaying, setModalPlaying] = useState(true);
   const [modalMuted, setModalMuted] = useState(false);
   const [modalProgress, setModalProgress] = useState(0);
   const [modalDuration, setModalDuration] = useState(0);
   const [modalIsPortrait, setModalIsPortrait] = useState(false);
-  const [modalFallbackToLocal, setModalFallbackToLocal] = useState(false);
+  const [modalPlaybackMode, setModalPlaybackMode] = useState<'embed' | 'local'>('embed');
   const modalVideoRef = useRef<HTMLVideoElement | null>(null);
   const modalEmbedHostRef = useRef<HTMLDivElement | null>(null);
   const modalYouTubePlayerRef = useRef<YouTubePlayer | null>(null);
   const modalUsesLocalVideo = Boolean(
-    activeVideo?.videoSrc && (!activeVideo.embedSrc || modalFallbackToLocal),
+    activeVideo?.videoSrc && (!activeVideo.embedSrc || modalPlaybackMode === 'local'),
   );
+
+  const markPortfolioItemUnavailable = (item: PortfolioItem) => {
+    setUnavailablePortfolioTitles((current) =>
+      current.includes(item.title) ? current : [...current, item.title],
+    );
+
+    modalYouTubePlayerRef.current?.destroy();
+    modalYouTubePlayerRef.current = null;
+
+    const video = modalVideoRef.current;
+    if (video) {
+      video.pause();
+    }
+
+    setActiveVideo((current) => (current?.title === item.title ? null : current));
+  };
 
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>('.reveal');
@@ -399,13 +412,13 @@ function App() {
   useEffect(() => {
     const host = modalEmbedHostRef.current;
 
-    if (!host || !activeVideo?.embedSrc || !activeVideo.videoSrc || modalFallbackToLocal) {
+    if (!host || !activeVideo?.embedSrc || !activeVideo.videoSrc || modalPlaybackMode !== 'embed') {
       return;
     }
 
     const youtubeVideoId = extractYouTubeVideoId(activeVideo.embedSrc);
     if (!youtubeVideoId) {
-      setModalFallbackToLocal(true);
+      setModalPlaybackMode('local');
       return;
     }
 
@@ -417,7 +430,7 @@ function App() {
 
       modalYouTubePlayerRef.current?.destroy();
       modalYouTubePlayerRef.current = null;
-      setModalFallbackToLocal(true);
+      setModalPlaybackMode('local');
     }, 4500);
 
     void loadYouTubeIframeApi()
@@ -445,7 +458,6 @@ function App() {
               }
 
               window.clearTimeout(fallbackTimeout);
-              setModalFallbackToLocal(false);
             },
             onError: () => {
               if (cancelled) {
@@ -455,7 +467,7 @@ function App() {
               window.clearTimeout(fallbackTimeout);
               modalYouTubePlayerRef.current?.destroy();
               modalYouTubePlayerRef.current = null;
-              setModalFallbackToLocal(true);
+              setModalPlaybackMode('local');
             },
           },
         });
@@ -466,7 +478,7 @@ function App() {
         }
 
         window.clearTimeout(fallbackTimeout);
-        setModalFallbackToLocal(true);
+        setModalPlaybackMode('local');
       });
 
     return () => {
@@ -476,7 +488,7 @@ function App() {
       modalYouTubePlayerRef.current = null;
       host.innerHTML = '';
     };
-  }, [activeVideo, modalFallbackToLocal]);
+  }, [activeVideo, modalPlaybackMode]);
 
   const openVideoModal = (item: PortfolioItem) => {
     setModalMuted(false);
@@ -484,7 +496,7 @@ function App() {
     setModalDuration(0);
     setModalPlaying(true);
     setModalIsPortrait(false);
-    setModalFallbackToLocal(false);
+    setModalPlaybackMode(item.videoSrc && !item.embedSrc ? 'local' : 'embed');
     setActiveVideo(item);
   };
 
@@ -494,6 +506,14 @@ function App() {
       video.pause();
     }
     setActiveVideo(null);
+  };
+
+  const handleModalVideoError = () => {
+    if (!activeVideo) {
+      return;
+    }
+
+    markPortfolioItemUnavailable(activeVideo);
   };
 
   const toggleModalPlayback = () => {
@@ -550,8 +570,13 @@ function App() {
 
   const visiblePortfolio =
     activeFilter === 'All'
-      ? portfolioItems.filter((item) => item.showInAll !== false)
-      : portfolioItems.filter((item) => item.category === activeFilter);
+      ? portfolioItems.filter(
+          (item) => item.showInAll !== false && !unavailablePortfolioTitles.includes(item.title),
+        )
+      : portfolioItems.filter(
+          (item) =>
+            item.category === activeFilter && !unavailablePortfolioTitles.includes(item.title),
+        );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -741,6 +766,7 @@ function App() {
                         loop
                         playsInline
                         preload="metadata"
+                        onError={() => markPortfolioItemUnavailable(item)}
                       />
                       <div className="port-video-hint">
                         <span className="port-video-hint-icon" aria-hidden="true">
@@ -1048,6 +1074,7 @@ function App() {
                   playsInline
                   preload="auto"
                   onClick={toggleModalPlayback}
+                  onError={handleModalVideoError}
                 />
               ) : activeVideo.embedSrc ? (
                 activeVideo.videoSrc ? (
