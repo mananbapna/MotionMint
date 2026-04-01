@@ -2,8 +2,9 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import anshumanPortrait from './assets/Anshuman_Portrait.png';
 import harshPortrait from './assets/Harsh_Portrait.png';
 import mananPortrait from './assets/Manan_Portrait.png';
+import lalitChandigarhReelVideo from './RollingLoudIndia.mp4';
 
-type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | '3D';
+type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | 'Fest';
 
 type PortfolioItem = {
   emoji: string;
@@ -19,11 +20,41 @@ type PortfolioItem = {
   showInAll?: boolean;
 };
 
+type YouTubePlayer = {
+  destroy: () => void;
+};
+
+type YouTubePlayerNamespace = {
+  Player: new (
+    element: HTMLElement,
+    options: {
+      width?: string | number;
+      height?: string | number;
+      videoId: string;
+      playerVars?: Record<string, string | number>;
+      events?: {
+        onReady?: () => void;
+        onError?: () => void;
+      };
+    },
+  ) => YouTubePlayer;
+};
+
+declare global {
+  interface Window {
+    YT?: YouTubePlayerNamespace;
+    onYouTubeIframeAPIReady?: () => void;
+  }
+}
+
 const VFX_YOUTUBE_ID = 'Wmam-VvjcfE';
 const WEDDING_YOUTUBE_ID = 'PxFDrJvHbVo';
 const SECOND_WEDDING_YOUTUBE_ID = 'SEF0Bfo0S4A';
-const MAIN_YOUTUBE_ID = 'OUKn4v5a4xM';
+const MAIN_YOUTUBE_ID = 'Es9MvcHDybI';
 const REEL_YOUTUBE_ID = '9LvdTwylZoI';
+const LALIT_REEL_YOUTUBE_ID = 'f1Au0kefri4';
+const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
+const FEST_YOUTUBE_ID = 'qJRmN1ZQ-BE';
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
@@ -50,7 +81,7 @@ const services = [
   ['🎉', 'Events & Parties', 'Dynamic event highlight reels and party coverage edits that capture every moment of the celebration.'],
 ] as const;
 
-const filters: PortfolioCategory[] = ['All', 'VFX', 'Wedding', 'YouTube', 'Reels', '3D'];
+const filters: PortfolioCategory[] = ['All', 'VFX', 'Wedding', 'YouTube', 'Reels', 'Fest'];
 
 const portfolioItems: PortfolioItem[] = [
   {
@@ -114,18 +145,36 @@ const portfolioItems: PortfolioItem[] = [
     thumbnailSrc: `https://i.ytimg.com/vi/${REEL_YOUTUBE_ID}/hqdefault.jpg`,
   },
   {
-    emoji: '◈',
-    label: '3D Render',
-    title: 'Product Visualisation',
-    category: '3D',
-    subtitle: '3D · CAD',
+    emoji: '⚡',
+    label: 'Brand Reel',
+    title: 'LaLiT Chandigarh Reel',
+    category: 'Reels',
+    subtitle: 'Reels · Hospitality',
+    embedSrc: `https://www.youtube-nocookie.com/embed/${LALIT_REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${LALIT_REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${LALIT_REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${LALIT_REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${LALIT_REEL_YOUTUBE_ID}/hqdefault.jpg`,
+    videoSrc: lalitChandigarhReelVideo,
+    showInAll: false,
   },
   {
-    emoji: '🎯',
-    label: 'Brand Content',
-    title: 'UGC Campaign',
-    category: 'Reels',
-    subtitle: 'UGC · Brand',
+    emoji: '🎉',
+    label: 'Fest Aftermovie',
+    title: 'SIES 2024 Official Aftermovie',
+    category: 'Fest',
+    subtitle: 'Fest · Aftermovie',
+    embedSrc: `https://www.youtube-nocookie.com/embed/${FEST_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${FEST_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${FEST_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${FEST_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${FEST_YOUTUBE_ID}/hqdefault.jpg`,
+  },
+  {
+    emoji: '🎬',
+    label: 'Brand Shoot',
+    title: 'LaLiT Chandigarh',
+    category: 'YouTube',
+    subtitle: 'Brand Shoot · Hospitality',
+    embedSrc: `https://www.youtube-nocookie.com/embed/${LALIT_BRAND_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${LALIT_BRAND_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
+    previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${LALIT_BRAND_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${LALIT_BRAND_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${LALIT_BRAND_YOUTUBE_ID}/hqdefault.jpg`,
   },
 ];
 
@@ -141,6 +190,67 @@ const testimonials = [
   ['◈', '[Client Name]', 'Brand Campaign', 'The 3D product visualisations MotionMintStudio created for our brand were absolutely stunning. It elevated our entire marketing campaign.'],
 ] as const;
 
+let youtubeIframeApiPromise: Promise<YouTubePlayerNamespace> | null = null;
+
+function loadYouTubeIframeApi() {
+  if (window.YT?.Player) {
+    return Promise.resolve(window.YT);
+  }
+
+  if (!youtubeIframeApiPromise) {
+    youtubeIframeApiPromise = new Promise<YouTubePlayerNamespace>((resolve, reject) => {
+      const existingScript = document.querySelector<HTMLScriptElement>(
+        'script[src="https://www.youtube.com/iframe_api"]',
+      );
+      const previousReady = window.onYouTubeIframeAPIReady;
+
+      const handleReady = () => {
+        previousReady?.();
+
+        if (window.YT?.Player) {
+          resolve(window.YT);
+          return;
+        }
+
+        reject(new Error('YouTube iframe API did not initialize.'));
+      };
+
+      window.onYouTubeIframeAPIReady = handleReady;
+
+      if (existingScript) {
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      script.onerror = () => reject(new Error('Unable to load the YouTube iframe API.'));
+      document.head.append(script);
+    }).catch((error) => {
+      youtubeIframeApiPromise = null;
+      throw error;
+    });
+  }
+
+  return youtubeIframeApiPromise;
+}
+
+function extractYouTubeVideoId(embedSrc: string) {
+  try {
+    const url = new URL(embedSrc);
+    const segments = url.pathname.split('/').filter(Boolean);
+    const embedIndex = segments.indexOf('embed');
+
+    if (embedIndex === -1) {
+      return null;
+    }
+
+    return segments[embedIndex + 1] ?? null;
+  } catch {
+    return null;
+  }
+}
+
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<PortfolioCategory>('All');
@@ -151,7 +261,13 @@ function App() {
   const [modalProgress, setModalProgress] = useState(0);
   const [modalDuration, setModalDuration] = useState(0);
   const [modalIsPortrait, setModalIsPortrait] = useState(false);
+  const [modalFallbackToLocal, setModalFallbackToLocal] = useState(false);
   const modalVideoRef = useRef<HTMLVideoElement | null>(null);
+  const modalEmbedHostRef = useRef<HTMLDivElement | null>(null);
+  const modalYouTubePlayerRef = useRef<YouTubePlayer | null>(null);
+  const modalUsesLocalVideo = Boolean(
+    activeVideo?.videoSrc && (!activeVideo.embedSrc || modalFallbackToLocal),
+  );
 
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>('.reveal');
@@ -204,7 +320,7 @@ function App() {
         return;
       }
 
-      if (!activeVideo.videoSrc) {
+      if (!modalUsesLocalVideo) {
         return;
       }
 
@@ -238,12 +354,12 @@ function App() {
       document.body.classList.remove('video-open');
       window.removeEventListener('keydown', handleEscape);
     };
-  }, [activeVideo]);
+  }, [activeVideo, modalUsesLocalVideo]);
 
   useEffect(() => {
     const video = modalVideoRef.current;
 
-    if (!video || !activeVideo || !activeVideo.videoSrc) {
+    if (!video || !activeVideo || !modalUsesLocalVideo) {
       return;
     }
 
@@ -278,7 +394,89 @@ function App() {
       video.removeEventListener('play', handlePlay);
       video.removeEventListener('pause', handlePause);
     };
-  }, [activeVideo, modalMuted]);
+  }, [activeVideo, modalMuted, modalUsesLocalVideo]);
+
+  useEffect(() => {
+    const host = modalEmbedHostRef.current;
+
+    if (!host || !activeVideo?.embedSrc || !activeVideo.videoSrc || modalFallbackToLocal) {
+      return;
+    }
+
+    const youtubeVideoId = extractYouTubeVideoId(activeVideo.embedSrc);
+    if (!youtubeVideoId) {
+      setModalFallbackToLocal(true);
+      return;
+    }
+
+    let cancelled = false;
+    const fallbackTimeout = window.setTimeout(() => {
+      if (cancelled) {
+        return;
+      }
+
+      modalYouTubePlayerRef.current?.destroy();
+      modalYouTubePlayerRef.current = null;
+      setModalFallbackToLocal(true);
+    }, 4500);
+
+    void loadYouTubeIframeApi()
+      .then((YT) => {
+        if (cancelled || !modalEmbedHostRef.current) {
+          return;
+        }
+
+        modalEmbedHostRef.current.innerHTML = '';
+        modalYouTubePlayerRef.current = new YT.Player(modalEmbedHostRef.current, {
+          width: '100%',
+          height: '100%',
+          videoId: youtubeVideoId,
+          playerVars: {
+            autoplay: 1,
+            playsinline: 1,
+            rel: 0,
+            loop: 1,
+            playlist: youtubeVideoId,
+          },
+          events: {
+            onReady: () => {
+              if (cancelled) {
+                return;
+              }
+
+              window.clearTimeout(fallbackTimeout);
+              setModalFallbackToLocal(false);
+            },
+            onError: () => {
+              if (cancelled) {
+                return;
+              }
+
+              window.clearTimeout(fallbackTimeout);
+              modalYouTubePlayerRef.current?.destroy();
+              modalYouTubePlayerRef.current = null;
+              setModalFallbackToLocal(true);
+            },
+          },
+        });
+      })
+      .catch(() => {
+        if (cancelled) {
+          return;
+        }
+
+        window.clearTimeout(fallbackTimeout);
+        setModalFallbackToLocal(true);
+      });
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallbackTimeout);
+      modalYouTubePlayerRef.current?.destroy();
+      modalYouTubePlayerRef.current = null;
+      host.innerHTML = '';
+    };
+  }, [activeVideo, modalFallbackToLocal]);
 
   const openVideoModal = (item: PortfolioItem) => {
     setModalMuted(false);
@@ -286,6 +484,7 @@ function App() {
     setModalDuration(0);
     setModalPlaying(true);
     setModalIsPortrait(false);
+    setModalFallbackToLocal(false);
     setActiveVideo(item);
   };
 
@@ -840,7 +1039,7 @@ function App() {
               Close
             </button>
             <div className="video-modal-stage">
-              {activeVideo.videoSrc ? (
+              {modalUsesLocalVideo ? (
                 <video
                   ref={modalVideoRef}
                   className="video-modal-player"
@@ -851,14 +1050,18 @@ function App() {
                   onClick={toggleModalPlayback}
                 />
               ) : activeVideo.embedSrc ? (
-                <iframe
-                  className="video-modal-embed"
-                  src={activeVideo.embedSrc}
-                  title={activeVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
+                activeVideo.videoSrc ? (
+                  <div ref={modalEmbedHostRef} className="video-modal-embed" aria-label={activeVideo.title} />
+                ) : (
+                  <iframe
+                    className="video-modal-embed"
+                    src={activeVideo.embedSrc}
+                    title={activeVideo.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                )
               ) : null}
               <div className="video-modal-topbar">
                 <div className="video-modal-meta">
@@ -866,7 +1069,7 @@ function App() {
                   <span>{activeVideo.subtitle}</span>
                 </div>
               </div>
-              {activeVideo.videoSrc ? (
+              {modalUsesLocalVideo ? (
               <div className="video-modal-controls">
                 <button
                   type="button"
