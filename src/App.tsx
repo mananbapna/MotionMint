@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import anshumanPortrait from './assets/Anshuman_Portrait.png';
 import harshPortrait from './assets/Harsh_Portrait.png';
 import mananPortrait from './assets/Manan_Portrait.png';
+import logoImage from './assets/logo.png';
 import rollingOutIndiaReelVideo from './assets/RollingOutIndia.mp4';
 
 type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | 'Fest';
@@ -615,7 +616,7 @@ function App() {
     <>
       <nav className="site-nav">
         <a href="#hero" className="nav-logo">
-          MotionMint<span>Studio</span>
+          <img src={logoImage} alt={BRAND_NAME} className="brand-logo-image brand-logo-image-nav" />
         </a>
 
         <ul className="nav-links">
@@ -1036,7 +1037,7 @@ function App() {
 
       <footer>
         <div className="footer-logo">
-          MotionMint<span>Studio</span>
+          <img src={logoImage} alt={BRAND_NAME} className="brand-logo-image brand-logo-image-footer" />
         </div>
         <div className="footer-links">
           <a href="#services">Services</a>

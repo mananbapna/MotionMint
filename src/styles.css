@@ -114,20 +114,27 @@ section {
 
 .nav-logo,
 .footer-logo {
-  font-family: 'Cormorant Garamond', serif;
-  letter-spacing: 0.08em;
-  color: var(--white);
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-logo {
-  font-size: 1.6rem;
-  font-weight: 500;
+  flex-shrink: 0;
 }
 
-.nav-logo span,
-.footer-logo span {
-  color: var(--gold);
+.brand-logo-image {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-logo-image-nav {
+  height: 58px;
+}
+
+.brand-logo-image-footer {
+  height: 124px;
 }
 
 .nav-links,
@@ -1121,16 +1128,33 @@ footer {
   text-align: center;
   border: 1px solid var(--border);
   background: var(--black-2);
-  transition: transform 0.4s, border-color 0.4s;
+  transition:
+    transform 0.4s,
+    border-color 0.4s,
+    background 0.4s,
+    box-shadow 0.4s;
 }
 
-.team-card:hover,
-.test-card:hover {
-  border-color: var(--gold-dim);
+.team-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
 }
 
 .team-card:hover {
-  transform: translateY(-4px);
+  background: var(--black-3);
+}
+
+.team-card:hover::before {
+  transform: scaleX(1);
+}
+
+.test-card:hover {
+  border-color: var(--gold-dim);
 }
 
 .team-avatar {
@@ -1350,11 +1374,6 @@ footer {
   border-top: 1px solid var(--border);
 }
 
-.footer-logo {
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-
 .footer-copy,
 .footer-links a {
   color: var(--white-dim);
@@ -1448,6 +1467,14 @@ footer {
 
   .hero-showreel {
     margin-top: 3rem;
+  }
+
+  .brand-logo-image-nav {
+    height: 48px;
+  }
+
+  .brand-logo-image-footer {
+    height: 96px;
   }
 
   .portfolio-grid,
