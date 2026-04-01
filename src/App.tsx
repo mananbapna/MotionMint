@@ -117,7 +117,7 @@ const portfolioItems: PortfolioItem[] = [
   {
     emoji: '▶',
     label: 'YouTube Feature',
-    title: 'YouTube Spotlight',
+    title: 'Lalbagh Cha Raja 2025',
     category: 'YouTube',
     subtitle: 'YouTube · Long-Form',
     embedSrc: `https://www.youtube-nocookie.com/embed/${MAIN_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${MAIN_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
