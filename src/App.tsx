@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useRef, useState } from 'react';
 import anshumanPortrait from './assets/Anshuman_Portrait.png';
 import harshPortrait from './assets/Harsh_Portrait.png';
 import mananPortrait from './assets/Manan_Portrait.png';
+import rollingOutIndiaReelVideo from './assets/RollingOutIndia.mp4';
 
 type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | 'Fest';
 
@@ -54,7 +55,6 @@ const REEL_YOUTUBE_ID = '9LvdTwylZoI';
 const ROLLINGOUTINDIA_REEL_YOUTUBE_ID = 'f1Au0kefri4';
 const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
 const FEST_YOUTUBE_ID = 'qJRmN1ZQ-BE';
-const ROLLINGOUTINDIA_REEL = '/src/assets/RollingOutIndia.mp4';
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
@@ -153,7 +153,7 @@ const portfolioItems: PortfolioItem[] = [
     embedSrc: `https://www.youtube-nocookie.com/embed/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
     previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
     thumbnailSrc: `https://i.ytimg.com/vi/${ROLLINGOUTINDIA_REEL_YOUTUBE_ID}/hqdefault.jpg`,
-    videoSrc: ROLLINGOUTINDIA_REEL,
+    videoSrc: rollingOutIndiaReelVideo,
     showInAll: false,
   },
   {
