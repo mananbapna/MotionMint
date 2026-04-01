@@ -54,7 +54,7 @@ const SECOND_WEDDING_YOUTUBE_ID = 'SEF0Bfo0S4A';
 const MAIN_YOUTUBE_ID = 'Es9MvcHDybI';
 const REEL_YOUTUBE_ID = '9LvdTwylZoI';
 const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
-const FEST_YOUTUBE_ID = 'qJRmN1ZQ-BE';
+const FEST_YOUTUBE_ID = 'xsTenjiqYUM';
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
