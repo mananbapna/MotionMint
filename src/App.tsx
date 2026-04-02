@@ -617,6 +617,9 @@ function App() {
       <nav className="site-nav">
         <a href="#hero" className="nav-logo">
           <img src={logoImage} alt={BRAND_NAME} className="brand-logo-image brand-logo-image-nav" />
+          <span className="brand-logo-wordmark">
+            MotionMint<span>Studio</span>
+          </span>
         </a>
 
         <ul className="nav-links">

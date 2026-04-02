@@ -121,6 +121,7 @@ section {
 
 .nav-logo {
   flex-shrink: 0;
+  gap: 0.8rem;
 }
 
 .brand-logo-image {
@@ -135,6 +136,20 @@ section {
 
 .brand-logo-image-footer {
   height: 124px;
+}
+
+.brand-logo-wordmark {
+  color: var(--white);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.brand-logo-wordmark span {
+  color: var(--gold);
 }
 
 .nav-links,
@@ -1475,6 +1490,10 @@ footer {
 
   .brand-logo-image-footer {
     height: 96px;
+  }
+
+  .brand-logo-wordmark {
+    font-size: 1.15rem;
   }
 
   .portfolio-grid,
