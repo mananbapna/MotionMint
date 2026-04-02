@@ -18,11 +18,20 @@ type PortfolioItem = {
   embedSrc?: string;
   previewEmbedSrc?: string;
   thumbnailSrc?: string;
+  previewMode?: 'iframe' | 'player';
   showInAll?: boolean;
 };
 
 type YouTubePlayer = {
   destroy: () => void;
+  mute: () => void;
+  playVideo: () => void;
+  seekTo: (seconds: number, allowSeekAhead?: boolean) => void;
+};
+
+type YouTubePlayerEvent = {
+  data?: number;
+  target: YouTubePlayer;
 };
 
 type YouTubePlayerNamespace = {
@@ -34,11 +43,15 @@ type YouTubePlayerNamespace = {
       videoId: string;
       playerVars?: Record<string, string | number>;
       events?: {
-        onReady?: () => void;
+        onReady?: (event: YouTubePlayerEvent) => void;
         onError?: () => void;
+        onStateChange?: (event: YouTubePlayerEvent) => void;
       };
     },
   ) => YouTubePlayer;
+  PlayerState: {
+    ENDED: number;
+  };
 };
 
 declare global {
@@ -53,6 +66,7 @@ const WEDDING_YOUTUBE_ID = 'PxFDrJvHbVo';
 const SECOND_WEDDING_YOUTUBE_ID = 'SEF0Bfo0S4A';
 const MAIN_YOUTUBE_ID = 'Es9MvcHDybI';
 const REEL_YOUTUBE_ID = '9LvdTwylZoI';
+const SECOND_REEL_YOUTUBE_ID = 'l4nRkeg3RcY';
 const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
 const FEST_YOUTUBE_ID = 'xsTenjiqYUM';
 
@@ -143,6 +157,18 @@ const portfolioItems: PortfolioItem[] = [
     embedSrc: `https://www.youtube-nocookie.com/embed/${REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${REEL_YOUTUBE_ID}&rel=0&vq=hd1080&hd=1`,
     previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${REEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd1080&hd=1`,
     thumbnailSrc: `https://i.ytimg.com/vi/${REEL_YOUTUBE_ID}/hqdefault.jpg`,
+  },
+  {
+    emoji: '⚡',
+    label: 'Reel',
+    title: 'Jaipur Reel',
+    category: 'Reels',
+    subtitle: 'Reels · Social',
+    embedSrc: `https://www.youtube.com/embed/${SECOND_REEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${SECOND_REEL_YOUTUBE_ID}&rel=0&playsinline=1`,
+    previewEmbedSrc: `https://www.youtube.com/embed/${SECOND_REEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SECOND_REEL_YOUTUBE_ID}&rel=0&playsinline=1`,
+    thumbnailSrc: `https://i.ytimg.com/vi/${SECOND_REEL_YOUTUBE_ID}/hq2.jpg`,
+    previewMode: 'player',
+    showInAll: false,
   },
   {
     emoji: '⚡',
@@ -246,6 +272,103 @@ function extractYouTubeVideoId(embedSrc: string) {
   } catch {
     return null;
   }
+}
+
+type YouTubeLoopPreviewProps = {
+  className: string;
+  thumbnailSrc?: string;
+  title: string;
+  videoId: string;
+};
+
+function YouTubeLoopPreview({
+  className,
+  thumbnailSrc,
+  title,
+  videoId,
+}: YouTubeLoopPreviewProps) {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host || !videoId) {
+      return;
+    }
+
+    let cancelled = false;
+    let player: YouTubePlayer | null = null;
+
+    void loadYouTubeIframeApi()
+      .then((YT) => {
+        if (cancelled || !hostRef.current) {
+          return;
+        }
+
+        hostRef.current.innerHTML = '';
+        player = new YT.Player(hostRef.current, {
+          width: '100%',
+          height: '100%',
+          videoId,
+          playerVars: {
+            autoplay: 1,
+            controls: 0,
+            loop: 1,
+            mute: 1,
+            playlist: videoId,
+            playsinline: 1,
+            rel: 0,
+          },
+          events: {
+            onReady: (event) => {
+              if (cancelled) {
+                return;
+              }
+
+              event.target.mute();
+              event.target.playVideo();
+            },
+            onStateChange: (event) => {
+              if (cancelled || event.data !== YT.PlayerState.ENDED) {
+                return;
+              }
+
+              event.target.seekTo(0, true);
+              event.target.playVideo();
+            },
+          },
+        });
+      })
+      .catch(() => {
+        // The thumbnail backdrop remains visible if the preview player fails.
+      });
+
+    return () => {
+      cancelled = true;
+      player?.destroy();
+
+      if (hostRef.current) {
+        hostRef.current.innerHTML = '';
+      }
+    };
+  }, [videoId]);
+
+  return (
+    <div
+      ref={hostRef}
+      className={className}
+      aria-label={`${title} preview`}
+      style={
+        thumbnailSrc
+          ? {
+              backgroundImage: `url(${thumbnailSrc})`,
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+            }
+          : undefined
+      }
+    />
+  );
 }
 
 function App() {
@@ -782,13 +905,22 @@ function App() {
                   ) : item.embedSrc && item.thumbnailSrc ? (
                     <>
                       {item.previewEmbedSrc ? (
-                        <iframe
-                          className={`port-video port-video-embed ${item.category === 'Reels' ? 'port-video-embed-portrait' : ''}`}
-                          src={item.previewEmbedSrc}
-                          title={`${item.title} preview`}
-                          allow="autoplay; encrypted-media; picture-in-picture"
-                          referrerPolicy="strict-origin-when-cross-origin"
-                        />
+                        item.previewMode === 'player' ? (
+                          <YouTubeLoopPreview
+                            className={`port-video port-video-embed ${item.category === 'Reels' ? 'port-video-embed-portrait' : ''}`}
+                            thumbnailSrc={item.thumbnailSrc}
+                            title={item.title}
+                            videoId={extractYouTubeVideoId(item.previewEmbedSrc) ?? ''}
+                          />
+                        ) : (
+                          <iframe
+                            className={`port-video port-video-embed ${item.category === 'Reels' ? 'port-video-embed-portrait' : ''}`}
+                            src={item.previewEmbedSrc}
+                            title={`${item.title} preview`}
+                            allow="autoplay; encrypted-media; picture-in-picture"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                          />
+                        )
                       ) : (
                         <img src={item.thumbnailSrc} alt={item.title} className="port-video port-video-thumb" />
                       )}
