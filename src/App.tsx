@@ -5,13 +5,13 @@ import mananPortrait from './assets/Manan_Portrait.png';
 import logoImage from './assets/logo.png';
 import rollingOutIndiaReelVideo from './assets/RollingOutIndia.mp4';
 
-type PortfolioCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | 'Fest';
+type WorkCategory = 'All' | 'VFX' | 'Wedding' | 'YouTube' | 'Reels' | 'Fest';
 
-type PortfolioItem = {
+type WorkItem = {
   emoji: string;
   label: string;
   title: string;
-  category: PortfolioCategory;
+  category: WorkCategory;
   subtitle: string;
   featured?: boolean;
   videoSrc?: string;
@@ -69,6 +69,7 @@ const REEL_YOUTUBE_ID = '9LvdTwylZoI';
 const SECOND_REEL_YOUTUBE_ID = 'JufUwBvcqiE';
 const LALIT_BRAND_YOUTUBE_ID = '_rJM4rIfc24';
 const FEST_YOUTUBE_ID = 'xsTenjiqYUM';
+const SHOWREEL_YOUTUBE_ID = 'xvhY-232Y_M';
 
 const BRAND_NAME = 'MotionMintStudio';
 const INSTAGRAM_URL = 'https://www.instagram.com/_motionmintstudio?igsh=bXp1cmlzdGk2djB0';
@@ -76,28 +77,26 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/motionmintstudio/';
 const WHATSAPP_NUMBER = '918097620107';
 
 const navLinks = [
-  { href: '#services', label: 'Services' },
-  { href: '#portfolio', label: 'Work' },
+  { href: '#work', label: 'Work' },
   { href: '#about', label: 'About' },
   { href: '#team', label: 'Team' },
   { href: '#contact', label: 'Contact' },
 ] as const;
 
-const services = [
-  ['✦', 'VFX & Motion Graphics', 'Visual effects, compositing, and motion graphics that bring imagination to life with precision and artistry.'],
-  ['💍', 'Wedding & Pre-Wedding', 'Cinematic wedding films and dreamy pre-wedding edits that preserve your most precious moments with elegance.'],
-  ['▶', 'YouTube & Long-Form', 'Professional editing for YouTube channels — colour grading, pacing, sound design, and engaging storytelling.'],
-  ['⚡', 'Reels, Shorts & Short Films', 'Hook-driven short-form content optimised for Instagram, YouTube Shorts, and every major platform algorithm.'],
-  ['🎯', 'UGC & Brand Content', 'Authentic user-generated content edits, brand films, and product showcases that convert viewers into customers.'],
-  ['🎬', 'Commercial Shoots', 'Polished commercial shoot production and edits designed to showcase brands, products, and campaigns with premium visual impact.'],
-  ['🤖', 'AI Video & Automation', 'Cutting-edge AI-powered video generation, editing automation, and next-generation content production.'],
-  ['◈', '3D CAD & Visualisation', 'High-fidelity 3D modelling, product renders, and architectural visualisations crafted for maximum impact.'],
-  ['🎉', 'Events & Parties', 'Dynamic event highlight reels and party coverage edits that capture every moment of the celebration.'],
-] as const;
+const filters: WorkCategory[] = ['All', 'VFX', 'Wedding', 'YouTube', 'Reels', 'Fest'];
 
-const filters: PortfolioCategory[] = ['All', 'VFX', 'Wedding', 'YouTube', 'Reels', 'Fest'];
+const heroShowreel: WorkItem = {
+  emoji: '▶',
+  label: 'Showreel',
+  title: 'MotionMintStudio 2026 Showreel',
+  category: 'VFX',
+  subtitle: 'Showreel · 2026',
+  embedSrc: `https://www.youtube-nocookie.com/embed/${SHOWREEL_YOUTUBE_ID}?autoplay=1&loop=1&playlist=${SHOWREEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd2160&hd=1`,
+  previewEmbedSrc: `https://www.youtube-nocookie.com/embed/${SHOWREEL_YOUTUBE_ID}?autoplay=1&mute=1&controls=0&loop=1&playlist=${SHOWREEL_YOUTUBE_ID}&rel=0&playsinline=1&vq=hd2160&hd=1`,
+  thumbnailSrc: `https://i.ytimg.com/vi/${SHOWREEL_YOUTUBE_ID}/hqdefault.jpg`,
+};
 
-const portfolioItems: PortfolioItem[] = [
+const workItems: WorkItem[] = [
   {
     emoji: '✦',
     label: 'VFX Showreel',
@@ -373,10 +372,10 @@ function YouTubeLoopPreview({
 
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<PortfolioCategory>('All');
+  const [activeFilter, setActiveFilter] = useState<WorkCategory>('All');
   const [submitted, setSubmitted] = useState(false);
-  const [activeVideo, setActiveVideo] = useState<PortfolioItem | null>(null);
-  const [unavailablePortfolioTitles, setUnavailablePortfolioTitles] = useState<string[]>([]);
+  const [activeVideo, setActiveVideo] = useState<WorkItem | null>(null);
+  const [unavailableWorkTitles, setUnavailableWorkTitles] = useState<string[]>([]);
   const [modalPlaying, setModalPlaying] = useState(true);
   const [modalMuted, setModalMuted] = useState(false);
   const [modalProgress, setModalProgress] = useState(0);
@@ -390,8 +389,8 @@ function App() {
     activeVideo?.videoSrc && (!activeVideo.embedSrc || modalPlaybackMode === 'local'),
   );
 
-  const markPortfolioItemUnavailable = (item: PortfolioItem) => {
-    setUnavailablePortfolioTitles((current) =>
+  const markWorkItemUnavailable = (item: WorkItem) => {
+    setUnavailableWorkTitles((current) =>
       current.includes(item.title) ? current : [...current, item.title],
     );
 
@@ -614,7 +613,7 @@ function App() {
     };
   }, [activeVideo, modalPlaybackMode]);
 
-  const openVideoModal = (item: PortfolioItem) => {
+  const openVideoModal = (item: WorkItem) => {
     setModalMuted(false);
     setModalProgress(0);
     setModalDuration(0);
@@ -637,7 +636,7 @@ function App() {
       return;
     }
 
-    markPortfolioItemUnavailable(activeVideo);
+    markWorkItemUnavailable(activeVideo);
   };
 
   const toggleModalPlayback = () => {
@@ -692,14 +691,14 @@ function App() {
     return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
   };
 
-  const visiblePortfolio =
+  const visibleWork =
     activeFilter === 'All'
-      ? portfolioItems.filter(
-          (item) => item.showInAll !== false && !unavailablePortfolioTitles.includes(item.title),
+      ? workItems.filter(
+          (item) => item.showInAll !== false && !unavailableWorkTitles.includes(item.title),
         )
-      : portfolioItems.filter(
+      : workItems.filter(
           (item) =>
-            item.category === activeFilter && !unavailablePortfolioTitles.includes(item.title),
+            item.category === activeFilter && !unavailableWorkTitles.includes(item.title),
         );
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -709,7 +708,7 @@ function App() {
     const lastName = String(formData.get('lastName') ?? '').trim();
     const email = String(formData.get('email') ?? '').trim();
     const phone = String(formData.get('phone') ?? '').trim();
-    const service = String(formData.get('service') ?? '').trim();
+    const projectType = String(formData.get('projectType') ?? '').trim();
     const budget = String(formData.get('budget') ?? '').trim();
     const details = String(formData.get('details') ?? '').trim();
     const fullName = [firstName, lastName].filter(Boolean).join(' ');
@@ -720,7 +719,7 @@ function App() {
       `Name: ${fullName || 'Not provided'}`,
       `Email: ${email || 'Not provided'}`,
       `Phone / WhatsApp: ${phone || 'Not provided'}`,
-      `Service: ${service || 'Not selected'}`,
+      `Project Type: ${projectType || 'Not selected'}`,
       `Budget: ${budget || 'Not selected'}`,
       '',
       'Project Details:',
@@ -795,7 +794,7 @@ function App() {
             brands, creators, and storytellers.
           </p>
           <div className="hero-btns">
-            <a href="#portfolio" className="btn-primary">
+            <a href="#work" className="btn-primary">
               View Our Work
             </a>
             <a href="#contact" className="btn-secondary">
@@ -803,51 +802,47 @@ function App() {
             </a>
           </div>
           <div className="hero-showreel">
-            <div className="port-placeholder showreel-placeholder">
-              <div className="play-btn" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
+            <div
+              className="port-placeholder showreel-placeholder"
+              onClick={() => openVideoModal(heroShowreel)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  openVideoModal(heroShowreel);
+                }
+              }}
+              aria-label="Open MotionMintStudio 2026 Showreel video"
+              style={{
+                backgroundImage: `url(${heroShowreel.thumbnailSrc})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+              }}
+            >
+              <iframe
+                className="port-video port-video-embed showreel-video-embed"
+                src={heroShowreel.previewEmbedSrc}
+                title={`${heroShowreel.title} preview`}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
             </div>
-            <span className="reel-label">MotionMintStudio — 2024 Showreel</span>
+            <span className="reel-label">MotionMintStudio — 2026 Showreel</span>
           </div>
         </section>
 
         <div className="gold-line" />
 
-        <section id="services">
-          <div className="services-header reveal">
-            <p className="section-eyebrow">What We Do</p>
-            <h2 className="section-title">Our Services</h2>
-            <div className="divider" />
-            <p className="section-desc">
-              A full-spectrum creative studio offering everything from cinematic VFX to
-              social-ready content — built to elevate your brand.
-            </p>
-          </div>
-          <div className="services-grid">
-            {services.map(([icon, title, description], index) => (
-              <article key={title} className="service-card reveal">
-                <span className="service-num">{String(index + 1).padStart(2, '0')}</span>
-                <span className="service-icon">{icon}</span>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <div className="gold-line" />
-
-        <section id="portfolio">
-          <div className="portfolio-header reveal">
+        <section id="work">
+          <div className="work-showcase-header reveal">
             <p className="section-eyebrow">Selected Work</p>
-            <h2 className="section-title">Our Portfolio</h2>
+            <h2 className="section-title">Our Work</h2>
             <div className="divider" />
           </div>
 
-          <div className="portfolio-filter reveal" role="tablist" aria-label="Portfolio categories">
+          <div className="work-filter reveal" role="tablist" aria-label="Work categories">
             {filters.map((filter) => (
               <button
                 key={filter}
@@ -860,8 +855,8 @@ function App() {
             ))}
           </div>
 
-          <div className="portfolio-grid">
-            {visiblePortfolio.map((item, index) => (
+          <div className="work-grid">
+            {visibleWork.map((item, index) => (
               <article
                 key={`${item.title}-${index}`}
                 className={`port-item ${item.featured ? 'port-item-featured' : ''} ${item.videoSrc || item.embedSrc ? 'port-item-video' : ''}`}
@@ -893,7 +888,7 @@ function App() {
                         loop
                         playsInline
                         preload="metadata"
-                        onError={() => markPortfolioItemUnavailable(item)}
+                        onError={() => markWorkItemUnavailable(item)}
                       />
                       <div className="port-video-hint">
                         <span className="port-video-hint-icon" aria-hidden="true">
@@ -1120,10 +1115,10 @@ function App() {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="service">Service Required</label>
-                  <select id="service" name="service" defaultValue="" required>
+                  <label htmlFor="projectType">Project Type</label>
+                  <select id="projectType" name="projectType" defaultValue="" required>
                     <option value="" disabled>
-                      Select a service
+                      Select a project type
                     </option>
                     <option>VFX & Motion Graphics</option>
                     <option>Wedding / Pre-Wedding Film</option>
@@ -1175,8 +1170,7 @@ function App() {
           <img src={logoImage} alt={BRAND_NAME} className="brand-logo-image brand-logo-image-footer" />
         </div>
         <div className="footer-links">
-          <a href="#services">Services</a>
-          <a href="#portfolio">Work</a>
+          <a href="#work">Work</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>

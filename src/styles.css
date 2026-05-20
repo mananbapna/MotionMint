@@ -156,7 +156,7 @@ section {
 .footer-links,
 .socials,
 .hero-btns,
-.portfolio-filter {
+.work-filter {
   display: flex;
   flex-wrap: wrap;
 }
@@ -335,7 +335,6 @@ section {
 .hero-title,
 .section-title,
 .contact-info h2,
-.service-card h3,
 .team-card h3,
 .port-overlay-text h4,
 .test-quote {
@@ -426,38 +425,23 @@ section {
   background: linear-gradient(135deg, rgba(201, 168, 76, 0.05) 0%, transparent 50%);
 }
 
+.hero-showreel .port-placeholder {
+  cursor: pointer;
+}
+
+.hero-showreel .port-placeholder:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: -2px;
+}
+
 .showreel-placeholder {
   background: linear-gradient(135deg, #0d0d0d, #1c1c1c);
 }
 
-.play-btn {
-  width: 72px;
-  height: 72px;
-  border-radius: 999px;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(201, 168, 76, 0.08);
-  border: 1px solid var(--gold);
-  transition: background 0.3s, transform 0.3s;
-}
-
-.play-btn svg {
-  width: 24px;
-  height: 24px;
-  margin-left: 4px;
-  fill: var(--gold);
-}
-
-.play-btn:hover {
-  background: var(--gold);
-  transform: scale(1.05);
-}
-
-.play-btn:hover svg {
-  fill: var(--black);
+.showreel-video-embed {
+  left: 0;
+  width: 100%;
+  transform: none;
 }
 
 .reel-label {
@@ -473,7 +457,6 @@ section {
 }
 
 .section-eyebrow,
-.service-num,
 .team-role,
 .test-proj,
 .form-group label,
@@ -499,7 +482,6 @@ section {
 .section-desc,
 .contact-info p,
 .team-bio,
-.service-card p,
 .test-text {
   color: var(--white-dim);
   line-height: 1.9;
@@ -532,35 +514,30 @@ section {
   opacity: 0.4;
 }
 
-#services,
 #about,
 #testimonials,
 footer {
   background: var(--black-2);
 }
 
-.services-header,
 .team-header,
 .test-header {
   text-align: center;
   margin-bottom: 4rem;
 }
 
-.services-header .section-desc,
 .divider-centered .divider {
   margin-inline: auto;
 }
 
-.services-header .section-desc,
-.portfolio-header,
+.work-showcase-header,
 .team-header .divider,
 .test-header .divider {
   margin-left: auto;
   margin-right: auto;
 }
 
-.services-grid,
-.portfolio-grid,
+.work-grid,
 .about-grid,
 .team-grid,
 .test-grid,
@@ -569,75 +546,21 @@ footer {
   display: grid;
 }
 
-.services-grid {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1px;
-  border: 1px solid var(--border);
-}
-
-.service-card,
 .team-card,
 .test-card {
   position: relative;
   overflow: hidden;
 }
 
-.service-card {
-  padding: 2.5rem;
-  background: var(--black-2);
-  border: 1px solid transparent;
-  transition: background 0.4s;
-}
-
-.service-card::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  transform: scaleX(0);
-  transition: transform 0.4s;
-}
-
-.service-card:hover {
-  background: var(--black-3);
-}
-
-.service-card:hover::before {
-  transform: scaleX(1);
-}
-
-.service-num {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  color: var(--gold-dim);
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
-}
-
-.service-icon {
-  display: block;
-  margin-bottom: 1.2rem;
-  font-size: 1.8rem;
-}
-
-.service-card h3 {
-  margin: 0 0 0.7rem;
-  font-size: 1.3rem;
-  font-weight: 500;
-}
-
-.service-card p,
 .team-bio {
   font-size: 0.82rem;
 }
 
-.portfolio-header {
+.work-showcase-header {
   margin-bottom: 3rem;
 }
 
-.portfolio-filter {
+.work-filter {
   gap: 0.5rem;
   margin-bottom: 3rem;
 }
@@ -657,7 +580,7 @@ footer {
   border-color: var(--gold);
 }
 
-.portfolio-grid {
+.work-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
 }
@@ -1424,7 +1347,7 @@ footer {
 }
 
 @media (max-width: 1024px) {
-  .portfolio-grid {
+  .work-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1496,7 +1419,7 @@ footer {
     font-size: 1.15rem;
   }
 
-  .portfolio-grid,
+  .work-grid,
   .team-grid,
   .test-grid,
   .form-row {
@@ -1585,10 +1508,6 @@ footer {
   .form-submit {
     width: 100%;
     text-align: center;
-  }
-
-  .services-grid {
-    grid-template-columns: 1fr;
   }
 
   .about-badge {
